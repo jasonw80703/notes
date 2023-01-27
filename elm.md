@@ -639,10 +639,91 @@ app.ports.storeSession.subscribe(function(str) {
 app.ports.onSessionChange.send(someString);
 ````
 
+# Working with Maybes
+
+Elm guarantees the presence of values except for those wrapped in a `Maybe`.
+
+Rule 0: Actively try to model your data structures to avoid Maybe
+Rule 1: Separate code that checks for presence from code that calculates values
+Rule 2: The extracted function can return Maybe but it may not accept Maybe as any of its arguments
+
+## Dealing with Maybes
+
+```elm
+case optionalValue of
+	Just value -> -- do smt
+	Nothing -> -- do smt if not present
+```
+
+### Maybe.withDefault
+
+```elm
+case optionalNumber of
+	Just number -> number
+	Nothing -> 0
+
+Maybe.withDefault 0 optionalNumber
+```
+
+### Unwrapping and re-wrapping
+
+Call this function if the value is present and return a new Maybe... map!
+
+```elm
+case List.head users of
+	Just user -> Just user.friends
+	Nothing -> Nothing
+
+Maybe.map .friends (List.head users)
+```
+
+### Nested Maybes
+
+Function you call when the value is present returns a Maybe so no need to re-wrap it in Just.
+
+```elm
+case maybeFriends of
+	Just friends -> List.head friends -- no Just here
+	Nothing -> Nothing
+
+maybeFriends
+	|> Maybe.andThen List.head
+```
+
+Maybe.map doesn't work here because it would re-wrap the success with Just.
 
 
+### map vs. andThen
 
+Look at the return type of the function you're passing in.
 
+```elm
+something -> Maybe somethingElse -- use andThen
+something -> somethingElse -- use map
+```
 
+## Let's try it
 
+```elm
+case List.head users of
+  Just user ->
+    case List.head user.friends of
+      Just friend ->
+        Just (String.toUpper friend.name)
+
+      Nothing ->
+        Nothing
+
+  Nothing ->
+    Nothing
+
+-- becomes
+
+user
+	|> List.head
+	|> Maybe.map .friends
+	|> Maybe.andThen List.head
+	|> Maybe.map .name
+	|> Maybe.map String.toUpper
+```
 
