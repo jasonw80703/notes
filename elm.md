@@ -727,3 +727,54 @@ user
 	|> Maybe.map String.toUpper
 ```
 
+
+# Booleans and Enums
+
+Three state booleans
+
+```elm
+type alias Order =
+	{ id : Int
+	, delivery : Maybe Bool
+	}
+```
+
+Try a union type...
+
+```elm
+type DeliveryType = Delivery | Pickup | NoneSelected
+
+type alias Order =
+	{ id : Int
+	, deliveryType : DeliveryType
+	}
+```
+
+This makes the type more extensible and readable.
+
+### Boolean Flags
+
+```elm
+npc : Character
+npc =
+	Character True True False
+```
+
+wtf are these bools? Use union types.
+
+```elm
+npc =
+	Character Immortal Civilian Stationary
+
+type Mortality = Mortal | Immortal
+type MilitaryStatus = Civilian | CityGuard
+type Mobility = Stationary | Mobile
+
+type alias Character =
+	{ mortality : Mortality
+	, militaryStatus : MilitaryStatus
+	, mobility : Mobility
+	}
+```
+
+This makes ite easy to add a third variant to any of the types, and type correct!
