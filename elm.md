@@ -777,4 +777,62 @@ type alias Character =
 	}
 ```
 
-This makes ite easy to add a third variant to any of the types, and type correct!
+This makes it easy to add a third variant to any of the types, and type correct!
+
+# More about Union Types
+
+Tagged Union type allow enums to have parameters.
+
+This is sus
+```elm
+type alias Booking =
+  { date : Maybe Date
+  , option : Maybe BookingOption
+  , tickets : Maybe Ticket.Quantities
+  }
+```
+
+We're overusing Maybes. There are impossible states here that we can solve by using a tagged union.
+
+```elm
+type alias Booking =
+	{ date : Date
+	, option : BookingOption
+	, tickets: Ticket.Quantities
+	}
+
+type BookingProcess
+	= NotStarted
+	| DateSelected Date
+	| OptionSelected Date BookingOption
+	| TicketsSelected Booking
+```
+
+### Deck of cards example
+
+```elm
+type Suit
+  = Hearts
+  | Spades
+  | Diamonds
+  | Clubs
+
+type Value
+  = Two
+  | Three
+  | Four
+  | Five
+  | Six
+  | Seven
+  | Eight
+  | Nine
+  | Ten
+  | Jack
+  | Queen
+  | King
+  | Ace
+
+type Card
+  = StandardCard Value Suit
+  | Joker
+```
