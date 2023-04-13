@@ -1,3 +1,9 @@
 module Main where
-main = print "Hello, World!"
+
+salution = "Hello"
+person = "George"
+greeting =
+	salution <> " " <> person
+
+main = print greeting
 

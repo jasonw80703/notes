@@ -7,6 +7,7 @@ avoid success at all costs
 - all functions are pure functions (no side effects)
 - type system with a type interface
 - lazy language
+- whitespace sensitice language
 
 ## ghci
 `ghci` is Haskell's REPL.
@@ -77,3 +78,56 @@ Use `print` which combines show with putStrLn.
 ```haskell
 print 12
 ```
+
+## Haskell Programs
+Main.hs program needs to be compiled with
+```bash
+ghc Main
+
+./Main
+```
+
+You can also run your program once without compiling using `runhaskell`.
+
+## Haskell Variables
+```haskell
+var = 5
+name = "Jason"
+```
+
+Variables can be reused, but we're not changing the value of the variable.
+```haskell
+one = 1
+one
+=> 1
+
+two = one + one
+two
+=> 2
+
+one = 5
+one
+=> 5
+two
+=> 2
+```
+
+The value of `two` does not change because after `one` was reused, two is still referencing the old value.
+
+Variable are immutable!
+
+```haskell
+two = 1
+two = two + 1
+two
+```
+
+This is actually broken, it creates an infinite loop. You need to use another variable, a "prime variable".
+
+```haskell
+two = 1
+two' = two + 1
+two'
+```
+
+Prime variables are very common in Haskell!
